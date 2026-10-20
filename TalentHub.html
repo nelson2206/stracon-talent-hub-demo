@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Talent Hub – STRACON</title>
+<title>Inicio – Talent Hub – STRACON</title>
 <link rel="stylesheet" href="fonts/fonts.css">
 <script src="./vd-datos.js"></script>
 <script src="./vd-escenarios.js"></script>
@@ -45,7 +45,7 @@ h2{font-size:20px;font-weight:600;margin:0}
 .sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line2);padding-bottom:10px}
 .sec-head p{margin:0;color:var(--ink2);font-size:13px}
 
-/* Ciclo del trabajador: 4 tramos en columnas con filetes y herramientas numeradas, sin tarjetas */
+/* Ciclo del trabajador: 4 tramos en columnas con filetes y módulos numerados, sin tarjetas */
 .ciclo{display:grid;grid-template-columns:1.25fr 1.25fr 1fr .8fr;column-gap:24px;margin-top:4px}
 .fase h3{font-size:14px;font-weight:600;margin:0;padding:12px 0 8px;border-bottom:2px solid var(--ink);display:flex;justify-content:space-between;align-items:baseline}
 .fase h3 small{font-size:12px;font-weight:400;color:var(--ink2)}
@@ -114,10 +114,9 @@ svg text{font-family:'IBM Plex Sans','Segoe UI',sans-serif}
     <img src="assets/logo-stracon.png" alt="STRACON">
     <b>Talent Hub</b>
     <nav aria-label="Principal">
-      <span aria-current="page">Talent Hub</span>
+      <span aria-current="page">Inicio</span>
       <span class="sep opt" aria-hidden="true">|</span>
-      <a class="opt" href="Dashboard.dc.html">Consola</a>
-      <a class="opt" href="Main.dc.html">Revisión humana</a>
+      <a class="opt" href="Dashboard.dc.html">Validación documental</a>
     </nav>
   </div>
   <div class="user"><span class="who"><span id="uName"></span> <i>· Revisor</i></span><div class="avatar" id="uIni" aria-hidden="true"></div></div>
@@ -157,9 +156,9 @@ svg text{font-family:'IBM Plex Sans','Segoe UI',sans-serif}
   </section>
 
   <section class="sec" aria-labelledby="h-ciclo">
-    <div class="sec-head"><h2 id="h-ciclo">El ciclo del trabajador, en un solo lugar</h2><p>Del requerimiento al cese: 9 herramientas. La primera en operar es Validación documental.</p></div>
+    <div class="sec-head"><h2 id="h-ciclo">El ciclo del trabajador, en un solo lugar</h2><p>Talent Hub reúne 9 módulos, del requerimiento al cese. El primero en operar es Validación documental.</p></div>
     <div class="ciclo" id="ciclo"></div>
-    <p class="nota">Prototipo con datos ficticios de la demo. Los conteos salen del mismo estado que la Consola y Revisión humana: lo que decidas allí se refleja aquí. Las etapas marcadas «Próximamente» son la hoja de ruta propuesta, por validar con STRACON.</p>
+    <p class="nota">Prototipo con datos ficticios de la demo. Los conteos salen del mismo estado que la Consola y Revisión humana: lo que decidas allí se refleja aquí. Los módulos marcados «Próximamente» son la hoja de ruta propuesta, por validar con STRACON.</p>
   </section>
 </main>
 
@@ -311,7 +310,7 @@ svg text{font-family:'IBM Plex Sans','Segoe UI',sans-serif}
       : '';
   }
 
-  // Herramientas del Talent Hub en el orden de la vida del trabajador; null = herramienta activa (Validación documental)
+  // Módulos de la plataforma Talent Hub en el orden de la vida del trabajador; null = módulo activo (Validación documental)
   var FASES = [
     ['Ingreso', [
       ['Requerimiento de personas', 'Pedido de personal por faena, cargo y fecha de inicio.'],
@@ -337,9 +336,9 @@ svg text{font-family:'IBM Plex Sans','Segoe UI',sans-serif}
         if (t[1] !== null) return '<li class="tool">' + num + '<span><b>' + t[0] + '</b><span class="desc">' + t[1] + '</span><span class="prox">Próximamente</span></span></li>';
         return '<li class="tool activa" aria-current="step">' + num + '<span><b>' + t[0] + '</b><span class="desc">Dos agentes revisan y contrastan los documentos; la persona decide.</span>' +
           '<span class="estado"><strong>' + tot.porRevisar + '</strong> por decidir · ' + tot.clar + ' observados · ' + tot.ok + ' conformes<br>' + pl(urg, 'caso vencido o por vencer', 'casos vencidos o por vencer') + '</span>' +
-          '<a class="abrir" href="Dashboard.dc.html">Abrir la consola</a></span></li>';
+          '<a class="abrir" href="Dashboard.dc.html">Abrir el módulo</a></span></li>';
       }).join('');
-      return '<div class="fase"><h3>' + f[0] + '<small>' + pl(f[1].length, 'herramienta', 'herramientas') + '</small></h3><ol>' + tools + '</ol></div>';
+      return '<div class="fase"><h3>' + f[0] + '<small>' + pl(f[1].length, 'módulo', 'módulos') + '</small></h3><ol>' + tools + '</ol></div>';
     }).join('');
   }
 
