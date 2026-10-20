@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Talent Hub – STRACON</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<script src="./vd-datos.js"></script>
+<script src="./vd-escenarios.js"></script>
+<script src="./vd-store.js"></script>
+<style>
+:root{
+  --navy:#16284C; --ink:#14213D; --ink2:#4A5568; --bg:#F3F5F8; --line:#E1E6EE; --line2:#CBD3DF; --panel:#FFFFFF;
+  --ag:#3B6FD8; --ag-tx:#1E40AF; --bad-tx:#8B1C2C; --warn-tx:#9A3412;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 'IBM Plex Sans','Segoe UI',system-ui,sans-serif;font-variant-numeric:tabular-nums}
+a{color:#1D4ED8}
+:focus-visible{outline:3px solid var(--ag);outline-offset:2px}
+header :focus-visible{outline-color:#FFFFFF}
+.skip{position:absolute;left:-999px;top:8px;background:#fff;padding:8px 12px;z-index:10}
+.skip:focus{left:8px}
+
+/* Cabecera, igual que Consola y Revisión humana */
+header{background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 20px;height:52px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{height:30px;width:auto;display:block}
+.brand b{font-weight:600;font-size:15px}
+nav{display:flex;gap:4px;margin-left:10px}
+nav a,nav span{font-size:13px;color:#C9D6EC;text-decoration:none;padding:15px 10px 13px;border-bottom:3px solid transparent}
+nav span[aria-current]{color:#fff;font-weight:600;border-bottom-color:#fff}
+nav .sep{color:#5D6F95;padding:15px 2px 13px}
+.user{display:flex;align-items:center;gap:10px;font-size:13px}
+.user i{font-style:normal;color:#C9D6EC}
+.avatar{width:32px;height:32px;border-radius:50%;background:#2E4677;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600}
+
+main{max-width:1360px;margin:0 auto;padding:28px 24px 48px}
+h1{font-size:28px;line-height:1.2;font-weight:600;margin:0 0 6px;max-width:900px}
+.lede{color:var(--ink2);font-size:16px;margin:0;max-width:880px}
+.stamp{font-size:12px;color:var(--ink2);margin-bottom:10px}
+h2{font-size:20px;font-weight:600;margin:0}
+.sec{margin-top:36px}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line2);padding-bottom:10px}
+.sec-head p{margin:0;color:var(--ink2);font-size:13px}
+
+/* Ciclo del trabajador: 4 tramos en columnas con filetes y herramientas numeradas, sin tarjetas */
+.ciclo{display:grid;grid-template-columns:1.25fr 1.25fr 1fr .8fr;column-gap:24px;margin-top:4px}
+.fase h3{font-size:14px;font-weight:600;margin:0;padding:12px 0 8px;border-bottom:2px solid var(--ink);display:flex;justify-content:space-between;align-items:baseline}
+.fase h3 small{font-size:12px;font-weight:400;color:var(--ink2)}
+.fase ol{list-style:none;margin:0;padding:0}
+.tool{display:grid;grid-template-columns:36px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid var(--line)}
+.tool .n{font-size:20px;font-weight:300;color:var(--line2);line-height:1.1}
+.tool b{display:block;font-size:15px;font-weight:600;line-height:1.3}
+.tool .desc{display:block;font-size:13px;color:var(--ink2)}
+.tool .prox{display:block;font-size:12px;color:var(--ink2);margin-top:4px}
+.tool.activa{background:var(--panel);box-shadow:inset 3px 0 0 var(--navy);padding:14px 14px 16px 12px;margin:0 -14px 0 -12px;grid-template-columns:36px 1fr}
+.tool.activa .n{color:var(--navy);font-weight:600}
+.tool.activa .estado{display:block;margin-top:8px;font-size:13px}
+.tool.activa .estado strong{font-size:20px;font-weight:600;margin-right:2px}
+.tool.activa .abrir{margin-top:10px;display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 14px;border-radius:6px;background:var(--navy);color:#fff;text-decoration:none;font-weight:600;font-size:13px}
+
+/* 2. Qué revisar primero */
+.prio{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:16px;margin-top:16px;align-items:start}
+.prio .panel:first-child{position:sticky;top:16px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px}
+.panel h3{font-size:16px;font-weight:600;margin:0 0 4px}
+.panel .sub{font-size:13px;color:var(--ink2);margin:0 0 16px}
+svg text{font-family:'IBM Plex Sans','Segoe UI',sans-serif}
+.dot{cursor:pointer}
+.dot:hover,.dot.on{stroke:#14213D;stroke-width:3}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12px;color:var(--ink2);margin-top:12px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:50%;display:inline-block}
+
+.cola{list-style:none;margin:0;padding:0}
+.grupo{font-size:13px;font-weight:600;color:var(--ink);padding:16px 0 6px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}
+.grupo:first-child{padding-top:0}
+.grupo small{font-weight:400;color:var(--ink2);font-size:12px}
+.fila{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;padding:10px 6px 10px 0;border-bottom:1px solid var(--line);text-decoration:none;color:inherit;transition:background-color .15s var(--ease)}
+.fila:hover,.fila.on{background:#EEF3FB}
+.fila .pos{font-size:16px;color:var(--ink2);text-align:right}
+.fila .nom{font-weight:600}
+.fila .por{font-size:13px;color:var(--ink2)}
+.fila .acc{font-size:12px;color:var(--ag-tx)}
+.fila .t{text-align:right;font-size:12px;color:var(--ink2);white-space:nowrap}
+.fila .t b{display:block;font-weight:600;font-size:14px;color:var(--ink)}
+.t.vencido b{color:var(--bad-tx)} .t.porvencer b{color:var(--warn-tx)}
+.espera{font-size:13px;color:var(--ink2);margin-top:14px}
+.mapa{display:inline-flex;gap:3px;margin-left:10px;vertical-align:1px}
+.md{width:10px;height:10px;border-radius:2px;display:inline-block;border:1.5px solid transparent}
+.md.ok{background:#1E7A5A}.md.alerta{background:#C2410C}.md.caida{background:#1F2A3D}.md.pend{border-color:#8A94A6;background:#fff}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* 3. Regla */
+.regla{display:grid;grid-template-columns:repeat(4,1fr);margin-top:16px}
+.regla div{padding:4px 18px 4px 0;border-right:1px solid var(--line);margin-right:18px}
+.regla div:last-child{border-right:0}
+.regla .n{font-size:20px;font-weight:300;color:var(--ink2)}
+.regla b{display:block;font-size:14px;margin:2px 0}
+.regla p{margin:0;font-size:13px;color:var(--ink2)}
+.nota{font-size:12px;color:var(--ink2);margin-top:22px}
+
+@media (max-width:1100px){.ciclo{grid-template-columns:1fr 1fr;row-gap:16px}.prio{grid-template-columns:1fr}.prio .panel:first-child{position:static}.regla{grid-template-columns:repeat(2,1fr);row-gap:16px}}
+@media (max-width:640px){main{padding:20px 16px 40px}.ciclo{grid-template-columns:1fr}.tool.activa{margin:0 -16px;padding-left:16px}.regla{grid-template-columns:1fr}.regla div{border-right:0}nav .opt,.brand b{display:none}.user .who{display:none}h1{font-size:22px}.panel{padding:16px}.sec-head{flex-direction:column;gap:4px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#prioridad">Saltar a qué revisar primero</a>
+<header>
+  <div class="brand">
+    <img src="assets/logo-stracon.png" alt="STRACON">
+    <b>Talent Hub</b>
+    <nav aria-label="Principal">
+      <span aria-current="page">Talent Hub</span>
+      <span class="sep opt" aria-hidden="true">|</span>
+      <a class="opt" href="Dashboard.dc.html">Consola</a>
+      <a class="opt" href="Main.dc.html">Revisión humana</a>
+    </nav>
+  </div>
+  <div class="user"><span class="who"><span id="uName"></span> <i>· Revisor</i></span><div class="avatar" id="uIni" aria-hidden="true"></div></div>
+</header>
+
+<main id="main">
+  <div class="stamp" id="stamp"></div>
+  <h1 id="titular"></h1>
+  <p class="lede" id="bajada"></p>
+
+  <section class="sec" id="prioridad" aria-labelledby="h-prio">
+    <div class="sec-head"><h2 id="h-prio">Qué revisar primero</h2><p id="prioSub"></p></div>
+    <div class="prio">
+      <div class="panel">
+        <h3>Riesgo frente a tiempo de espera</h3>
+        <p class="sub">Cada punto es un expediente que espera tu decisión. Arriba, más riesgo; a la derecha, más cerca de la meta de 24 h. Haz clic para abrirlo.</p>
+        <div id="matriz"></div>
+        <div class="legend" id="leyenda"></div>
+      </div>
+      <div class="panel">
+        <h3>Orden sugerido para hoy</h3>
+        <p class="sub">Primero lo que vence, luego lo que se resuelve en un clic y al final el análisis que aún está en plazo.</p>
+        <ol class="cola" id="cola"></ol>
+        <p class="espera" id="esperaPost"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="h-regla">
+    <div class="sec-head"><h2 id="h-regla">Por qué este orden</h2><p>La regla es fija y visible: el revisor sabe por qué un caso está arriba.</p></div>
+    <div class="regla">
+      <div><span class="n">1</span><b>Vencidos y por vencer</b><p>Más de 24 h esperando, o menos de 6 h para llegar a la meta. Da igual el riesgo: el plazo manda.</p></div>
+      <div><span class="n">2</span><b>Se resuelven en un clic</b><p>Listos para conformidad y aclaraciones recibidas. Despejarlos acorta la bandeja de inmediato.</p></div>
+      <div><span class="n">3</span><b>Riesgo alto en plazo</b><p>Señales altas del Agente 1 y discrepancias con el emisor, del más antiguo al más reciente.</p></div>
+      <div><span class="n">4</span><b>Riesgo bajo en plazo</b><p>Sitios sin respuesta y señales medias. Un sitio caído no es una falla del postulante.</p></div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="h-ciclo">
+    <div class="sec-head"><h2 id="h-ciclo">El ciclo del trabajador, en un solo lugar</h2><p>Del requerimiento al cese: 9 herramientas. La primera en operar es Validación documental.</p></div>
+    <div class="ciclo" id="ciclo"></div>
+    <p class="nota">Prototipo con datos ficticios de la demo. Los conteos salen del mismo estado que la Consola y Revisión humana: lo que decidas allí se refleja aquí. Las etapas marcadas «Próximamente» son la hoja de ruta propuesta, por validar con STRACON.</p>
+  </section>
+</main>
+
+<script>
+(function () {
+  'use strict';
+  var META = 24, ALERTA = 18; // h: meta de decisión y umbral "por vencer" (quedan menos de 6 h)
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var pl = function (n, a, b) { return n + ' ' + (n === 1 ? a : b); };
+  var fmtH = function (h) { return h < 1 ? Math.round(h * 60) + ' min' : (Math.round(h * 10) / 10).toString().replace('.', ',') + ' h'; };
+
+  // Tipo de caso: color del punto (paleta del cliente) y próxima acción del revisor
+  var TIPOS = {
+    discrepancia: { nombre: 'Discrepancia con el emisor', color: '#C2410C', accion: 'Resolver la discrepancia' },
+    senal:        { nombre: 'Señales del Agente 1',      color: '#9B1C31', accion: 'Revisar las señales' },
+    caida:        { nombre: 'Sitio sin respuesta',        color: '#1F2A3D', accion: 'Reintentar o validar a mano' },
+    listo:        { nombre: 'Listo para conformidad',     color: '#1E7A5A', accion: 'Dar conformidad' },
+    recibida:     { nombre: 'Aclaración recibida',        color: '#B7791F', accion: 'Revalidar la aclaración' }
+  };
+  function tipoDe(x) {
+    if (x.estado === 'clar') return 'recibida';
+    if (x.fase === 'ready') return 'listo';
+    if (x.fuenteCaida) return 'caida';
+    if (x.fase === 'a2stop') return 'discrepancia';
+    return 'senal';
+  }
+  function riesgoDe(x, tipo) {
+    if (tipo === 'listo' || tipo === 'caida' || tipo === 'recibida') return 'Bajo';
+    return x.criticidad === 'Alta' ? 'Alto' : 'Medio';
+  }
+  // Grupo de la regla (1..4)
+  function grupoDe(c) {
+    if (c.h >= ALERTA) return 1;
+    if (c.tipo === 'listo' || c.tipo === 'recibida') return 2;
+    if (c.riesgo === 'Alto') return 3;
+    return 4;
+  }
+  var GRUPOS = { 1: 'Vencidos y por vencer', 2: 'Se resuelven en un clic', 3: 'Riesgo alto en plazo', 4: 'Riesgo bajo en plazo' };
+
+  function casos() {
+    var procs = {};
+    VD.procesos().forEach(function (p) { procs[p.id] = p; });
+    var abierto = function (x) { return procs[x.proc] && procs[x.proc].estado === 'Abierto'; };
+    var rev = VD.expedientes({ estado: 'rev' }).filter(function (x) { return abierto(x) && x.fase !== 'a2run' && x.fase !== 'reval'; });
+    var rec = VD.expedientes({ estado: 'clar' }).filter(function (x) { return abierto(x) && x.aclaracionRecibida; });
+    var lst = rev.concat(rec).map(function (x) {
+      var tipo = tipoDe(x);
+      // El store no mide la espera de una aclaración recibida: se ubica en 0 h (dato a definir en la versión real)
+      var h = x.esperaH != null ? x.esperaH : 0;
+      var c = { id: x.id, proc: x.proc, procNombre: x.procesoNombre, nombre: x.nombre, tipo: tipo, h: h, riesgo: riesgoDe(x, tipo), docs: x.docsEstado.map(function (d) { return d.estado; }) };
+      c.grupo = grupoDe(c);
+      return c;
+    });
+    var rk = { Alto: 0, Medio: 1, Bajo: 2 };
+    lst.sort(function (a, b) { return (a.grupo - b.grupo) || (a.grupo === 1 ? b.h - a.h : 0) || (rk[a.riesgo] - rk[b.riesgo]) || (b.h - a.h); });
+    var esperando = VD.expedientes({ estado: 'clar' }).filter(function (x) { return abierto(x) && !x.aclaracionRecibida; });
+    return { lst: lst, esperando: esperando };
+  }
+
+  // Escala horizontal por tramos, los mismos de la Consola: menos de 4 h, de 4 a 24 h, más de 24 h
+  function xDe(h, x0, w) {
+    var t = w / 3;
+    if (h < 4) return x0 + (h / 4) * t;
+    if (h <= 24) return x0 + t + ((h - 4) / 20) * t;
+    return x0 + 2 * t + Math.min((h - 24) / 24, 1) * t;
+  }
+
+  function dibujarMatriz(lst) {
+    var W = 680, H = 330, x0 = 104, x1 = W - 24, y0 = 34, y1 = H - 44, w = x1 - x0;
+    var filas = ['Alto', 'Medio', 'Bajo'], fh = (y1 - y0) / 3;
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" role="img" aria-labelledby="mtit mdesc"><title id="mtit">Matriz de riesgo frente a tiempo de espera</title>' +
+      '<desc id="mdesc">' + esc(pl(lst.length, 'expediente', 'expedientes')) + ' ubicados por riesgo y horas de espera. La lista ordenada contiene los mismos casos.</desc>';
+    var xa = xDe(ALERTA, x0, w), xm = xDe(META, x0, w);
+    s += '<rect x="' + xa + '" y="' + y0 + '" width="' + (xm - xa) + '" height="' + (y1 - y0) + '" fill="#FFF4EC"/>';
+    s += '<rect x="' + xm + '" y="' + y0 + '" width="' + (x1 - xm) + '" height="' + (y1 - y0) + '" fill="#FBE9EB"/>';
+    filas.forEach(function (f, i) {
+      var y = y0 + i * fh;
+      s += '<line x1="' + x0 + '" x2="' + x1 + '" y1="' + y + '" y2="' + y + '" stroke="#E1E6EE"/>';
+      s += '<text x="' + (x0 - 12) + '" y="' + (y + fh / 2 + 4) + '" text-anchor="end" font-size="13" fill="#14213D">Riesgo ' + f.toLowerCase() + '</text>';
+    });
+    s += '<line x1="' + x0 + '" x2="' + x1 + '" y1="' + y1 + '" y2="' + y1 + '" stroke="#CBD3DF"/>';
+    [[0, '0 h'], [4, '4 h'], [24, '24 h'], [48, '48 h o más']].forEach(function (t) {
+      var x = xDe(t[0], x0, w);
+      s += '<line x1="' + x + '" x2="' + x + '" y1="' + y1 + '" y2="' + (y1 + 5) + '" stroke="#8A94A6"/>';
+      s += '<text x="' + x + '" y="' + (y1 + 19) + '" text-anchor="' + (t[0] === 48 ? 'end' : 'middle') + '" font-size="12" fill="#4A5568">' + t[1] + '</text>';
+    });
+    s += '<line x1="' + xm + '" x2="' + xm + '" y1="' + (y0 - 8) + '" y2="' + y1 + '" stroke="#9B1C31" stroke-width="1.5"/>';
+    s += '<text x="' + (xm + 6) + '" y="' + (y0 - 12) + '" font-size="12" fill="#8B1C2C" font-weight="600">Meta 24 h · vencidos</text>';
+    s += '<text x="' + (xa - 6) + '" y="' + (y0 - 12) + '" text-anchor="end" font-size="12" fill="#9A3412">Por vencer</text>';
+    s += '<text x="' + x0 + '" y="' + (H - 6) + '" font-size="12" fill="#4A5568">Horas esperando la decisión del revisor</text>';
+    // Puntos: los que caen en la misma zona se apilan para no taparse
+    var usados = {};
+    lst.forEach(function (c, k) {
+      var fi = filas.indexOf(c.riesgo);
+      var cx = Math.max(x0 + 14, xDe(c.h, x0, w));
+      var key = fi + ':' + Math.round(cx / 26);
+      var n = usados[key] = (usados[key] || 0) + 1;
+      var cy = y0 + fi * fh + 22 + (n - 1) * 26;
+      var ini = c.nombre.split(' ').slice(0, 2).map(function (p) { return p.charAt(0); }).join('');
+      s += '<g><circle class="dot" data-id="' + c.id + '" cx="' + cx + '" cy="' + cy + '" r="11" fill="' + TIPOS[c.tipo].color + '" tabindex="0" role="link" aria-label="' + esc((k + 1) + '. ' + c.nombre + ', ' + TIPOS[c.tipo].nombre + ', ' + fmtH(c.h) + ' esperando') + '"><title>' + esc((k + 1) + '. ' + c.nombre + ' · ' + TIPOS[c.tipo].nombre + ' · ' + fmtH(c.h)) + '</title></circle>' +
+        '<text x="' + cx + '" y="' + (cy + 4) + '" text-anchor="middle" font-size="10" font-weight="600" fill="#fff" pointer-events="none">' + esc(ini) + '</text>' +
+        '<text x="' + (cx + 15) + '" y="' + (cy + 4) + '" font-size="11" font-weight="600" fill="#4A5568" pointer-events="none">' + (k + 1) + '</text></g>';
+    });
+    s += '</svg>';
+    document.getElementById('matriz').innerHTML = s;
+    var hay = {};
+    lst.forEach(function (c) { hay[c.tipo] = 1; });
+    document.getElementById('leyenda').innerHTML = Object.keys(TIPOS).filter(function (k) { return hay[k]; })
+      .map(function (k) { return '<span><i style="background:' + TIPOS[k].color + '"></i>' + TIPOS[k].nombre + '</span>'; }).join('') +
+      '<span>El número junto al punto es su lugar en el orden sugerido</span>';
+  }
+
+  // Mini mapa de los 4 documentos, mismo código de color que la bandeja de Revisión humana
+  function claseDoc(e) {
+    if (/^(Coincide|Aprobado|Validado)/.test(e)) return ['ok', 'coincide o aprobado'];
+    if (/^Señal|Discrepancia/.test(e)) return ['alerta', e.toLowerCase()];
+    if (e === 'Fuente no disponible') return ['caida', 'sitio sin respuesta'];
+    return ['pend', 'aún sin contrastar'];
+  }
+  function mapaDocs(docs) {
+    var txt = [];
+    var celdas = docs.map(function (e, i) {
+      var k = claseDoc(e);
+      txt.push(VD.documentos[i] + ': ' + k[1]);
+      return '<i class="md ' + k[0] + '"></i>';
+    }).join('');
+    return '<span class="mapa" title="' + esc(txt.join(' · ')) + '"><span class="sr">' + esc(txt.join('; ')) + '</span>' + celdas + '</span>';
+  }
+
+  function dibujarCola(lst, esperando) {
+    var html = '', g = 0;
+    lst.forEach(function (c, k) {
+      if (c.grupo !== g) {
+        g = c.grupo;
+        var n = lst.filter(function (z) { return z.grupo === g; }).length;
+        html += '<li class="grupo">' + GRUPOS[g] + '<small>' + n + '</small></li>';
+      }
+      var cls = c.h > META ? 'vencido' : (c.h >= ALERTA ? 'porvencer' : '');
+      var plazo = c.h > META ? 'vencido hace ' + fmtH(c.h - META) : (c.h >= ALERTA ? 'vence en ' + fmtH(META - c.h) : 'en plazo');
+      var tiempo = c.tipo === 'recibida' ? '<b>Llegó</b>lista para revalidar' : '<b>' + fmtH(c.h) + '</b>' + plazo;
+      html += '<li><a class="fila" data-id="' + c.id + '" href="Main.dc.html?p=' + c.proc + '&c=' + c.id + '">' +
+        '<span class="pos">' + (k + 1) + '</span>' +
+        '<span><span class="nom">' + esc(c.nombre) + '</span>' + mapaDocs(c.docs) + '<br><span class="por">' + esc(TIPOS[c.tipo].nombre) + ' · ' + esc(c.procNombre) + '</span><br><span class="acc">' + esc(TIPOS[c.tipo].accion) + '</span></span>' +
+        '<span class="t ' + cls + '">' + tiempo + '</span></a></li>';
+    });
+    document.getElementById('cola').innerHTML = html;
+    document.getElementById('esperaPost').textContent = esperando.length
+      ? 'Además, ' + pl(esperando.length, 'expediente espera', 'expedientes esperan') + ' la respuesta del postulante (' + esperando.map(function (x) { return x.nombre; }).join(', ') + '). No requieren acción tuya hasta que llegue la aclaración.'
+      : '';
+  }
+
+  // Herramientas del Talent Hub en el orden de la vida del trabajador; null = herramienta activa (Validación documental)
+  var FASES = [
+    ['Ingreso', [
+      ['Requerimiento de personas', 'Pedido de personal por faena, cargo y fecha de inicio.'],
+      ['Validación documental', null],
+      ['Examen médico ocupacional', 'Programación, resultado y vigencia del examen de cada trabajador.']]],
+    ['En faena', [
+      ['Gestión de vuelos y régimen', 'Turnos por régimen de trabajo, subidas y bajadas, y vuelos a faena.'],
+      ['Habitabilidad', 'Asignación de habitaciones y ocupación del campamento.'],
+      ['Fatiga y somnolencia', 'Alertas de smart bands y de cámaras en los vehículos.']]],
+    ['Desarrollo', [
+      ['Rendimiento y especialidad', 'Desempeño por equipo y especialidades certificadas de cada persona.'],
+      ['Experiencia del worker', 'Pulso, solicitudes y comunicación con el trabajador.']]],
+    ['Salida', [
+      ['Cese del colaborador', 'Desvinculación ordenada, entrega de equipos y elegibilidad para volver.']]]
+  ];
+  function dibujarCiclo(c, lst) {
+    var tot = c.abiertos, n = 0;
+    var urg = lst.filter(function (z) { return z.grupo === 1; }).length;
+    document.getElementById('ciclo').innerHTML = FASES.map(function (f) {
+      var tools = f[1].map(function (t) {
+        n++;
+        var num = '<span class="n">' + (n < 10 ? '0' : '') + n + '</span>';
+        if (t[1] !== null) return '<li class="tool">' + num + '<span><b>' + t[0] + '</b><span class="desc">' + t[1] + '</span><span class="prox">Próximamente</span></span></li>';
+        return '<li class="tool activa" aria-current="step">' + num + '<span><b>' + t[0] + '</b><span class="desc">Dos agentes revisan y contrastan los documentos; la persona decide.</span>' +
+          '<span class="estado"><strong>' + tot.porRevisar + '</strong> por decidir · ' + tot.clar + ' observados · ' + tot.ok + ' conformes<br>' + pl(urg, 'caso vencido o por vencer', 'casos vencidos o por vencer') + '</span>' +
+          '<a class="abrir" href="Dashboard.dc.html">Abrir la consola</a></span></li>';
+      }).join('');
+      return '<div class="fase"><h3>' + f[0] + '<small>' + pl(f[1].length, 'herramienta', 'herramientas') + '</small></h3><ol>' + tools + '</ol></div>';
+    }).join('');
+  }
+
+  function render() {
+    var c = VD.conteos(), t = casos(), lst = t.lst;
+    var nombre = VD.usuario();
+    var conNombre = nombre !== 'Revisor';
+    document.getElementById('uName').textContent = nombre;
+    document.getElementById('uIni').textContent = nombre.split(' ').slice(0, 2).map(function (p) { return p.charAt(0).toUpperCase(); }).join('');
+    var venc = lst.filter(function (z) { return z.h > META; }).length;
+    var porv = lst.filter(function (z) { return z.h >= ALERTA && z.h <= META; }).length;
+    var clic = lst.filter(function (z) { return z.grupo === 2; }).length;
+    var rec = lst.filter(function (z) { return z.tipo === 'recibida'; }).length;
+    var pend = lst.length - rec; // igual a «Pendientes» de la Consola (procesos abiertos)
+    document.getElementById('stamp').textContent = 'Hoy, ' + c.reloj;
+    document.getElementById('titular').textContent = 'Buenos días' + (conNombre ? ', ' + nombre.split(' ')[0] : '') + '. ' +
+      (pend ? pl(pend, 'expediente espera', 'expedientes esperan') + ' tu decisión' + (venc ? ' y ' + pl(venc, 'ya pasó', 'ya pasaron') + ' las 24 h.' : '.') : 'No hay expedientes esperando tu decisión.');
+    var partes = [];
+    if (porv) partes.push(pl(porv, 'vence', 'vencen') + ' en menos de 6 h');
+    if (clic) partes.push(pl(clic, 'se resuelve', 'se resuelven') + ' en un clic' + (rec ? ' (incluida ' + pl(rec, 'aclaración que ya llegó', 'aclaraciones que ya llegaron') + ')' : ''));
+    document.getElementById('bajada').textContent = (partes.length ? 'Además, ' + partes.join(' y ') + '. ' : '') + (lst.length ? 'Empieza por arriba de la lista: está ordenada por plazo y luego por riesgo.' : '');
+    document.getElementById('prioSub').textContent = 'Validación documental · ' + pl(pend, 'pendiente', 'pendientes') + (rec ? ' + ' + pl(rec, 'aclaración recibida', 'aclaraciones recibidas') : '') + ' · procesos abiertos · meta: decidir en menos de 24 h';
+    dibujarCiclo(c, lst);
+    dibujarMatriz(lst);
+    dibujarCola(lst, t.esperando);
+  }
+
+  // Resaltado cruzado matriz y lista; el punto abre el mismo caso que su fila
+  function marcar(id, on) {
+    document.querySelectorAll('[data-id="' + id + '"]').forEach(function (el) { el.classList.toggle('on', on); });
+  }
+  function objetivo(e) { return e.target.closest ? e.target.closest('[data-id]') : null; }
+  document.addEventListener('mouseover', function (e) { var el = objetivo(e); if (el) marcar(el.getAttribute('data-id'), true); });
+  document.addEventListener('mouseout', function (e) { var el = objetivo(e); if (el) marcar(el.getAttribute('data-id'), false); });
+  function abrir(el) { var a = document.querySelector('a.fila[data-id="' + el.getAttribute('data-id') + '"]'); if (a) window.location.href = a.getAttribute('href'); }
+  document.addEventListener('click', function (e) { var el = e.target.closest && e.target.closest('circle.dot'); if (el) abrir(el); });
+  document.addEventListener('keydown', function (e) { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('circle.dot')) { e.preventDefault(); abrir(e.target); } });
+
+  render();
+  VD.suscribir(render);
+})();
+</script>
+</body>
+</html>
