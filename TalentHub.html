@@ -45,21 +45,41 @@ h2{font-size:20px;font-weight:600;margin:0}
 .sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line2);padding-bottom:10px}
 .sec-head p{margin:0;color:var(--ink2);font-size:13px}
 
-/* Ciclo del trabajador: 4 tramos en columnas con filetes y módulos numerados, sin tarjetas */
-.ciclo{display:grid;grid-template-columns:1.25fr 1.25fr 1fr .8fr;column-gap:24px;margin-top:4px}
-.fase h3{font-size:14px;font-weight:600;margin:0;padding:12px 0 8px;border-bottom:2px solid var(--ink);display:flex;justify-content:space-between;align-items:baseline}
-.fase h3 small{font-size:12px;font-weight:400;color:var(--ink2)}
-.fase ol{list-style:none;margin:0;padding:0}
-.tool{display:grid;grid-template-columns:36px 1fr;gap:8px;padding:12px 0;border-bottom:1px solid var(--line)}
-.tool .n{font-size:20px;font-weight:300;color:var(--line2);line-height:1.1}
-.tool b{display:block;font-size:15px;font-weight:600;line-height:1.3}
-.tool .desc{display:block;font-size:13px;color:var(--ink2)}
-.tool .prox{display:block;font-size:12px;color:var(--ink2);margin-top:4px}
-.tool.activa{background:var(--panel);box-shadow:inset 3px 0 0 var(--navy);padding:14px 14px 16px 12px;margin:0 -14px 0 -12px;grid-template-columns:36px 1fr}
-.tool.activa .n{color:var(--navy);font-weight:600}
-.tool.activa .estado{display:block;margin-top:8px;font-size:13px}
-.tool.activa .estado strong{font-size:20px;font-weight:600;margin-right:2px}
-.tool.activa .abrir{margin-top:10px;display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 14px;border-radius:6px;background:var(--navy);color:#fff;text-decoration:none;font-weight:600;font-size:13px}
+/* Línea de tiempo de la plataforma: 4 tramos, ancho proporcional a sus módulos; «En faena» es un bucle */
+.plataforma{margin:0 0 32px}
+.plataforma .sec-head{border-bottom:0;padding-bottom:4px}
+.linea{display:grid;grid-template-columns:3.6fr 3fr 2fr 1fr;column-gap:20px;margin-top:10px}
+.t-ingreso .mods{grid-template-columns:1fr 1.6fr 1fr;grid-auto-flow:row}
+.tramo-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:13px;padding-bottom:8px;border-bottom:2px solid var(--ink);position:relative}
+.tramo-h::after{content:'';position:absolute;right:-12px;bottom:-6px;border:5px solid transparent;border-left:8px solid var(--ink)}
+.tramo:last-child .tramo-h::after{display:none}
+.tramo-h b{font-weight:600;font-size:14px}
+.tramo-h span{color:var(--ink2);font-size:12px}
+.t-faena .tramo-h span{color:var(--ag-tx);font-weight:600}
+.mods{list-style:none;margin:0;padding:0;display:grid;grid-auto-flow:column;grid-auto-columns:1fr}
+.t-faena .mods{border:1.5px dashed #8A94A6;border-top:0;border-radius:0 0 12px 12px;padding-bottom:6px}
+.mod{padding:10px 10px 12px 0;display:flex;flex-direction:column;gap:2px;min-height:96px}
+.mod + .mod{border-left:1px solid var(--line);padding-left:10px}
+.t-faena .mod:first-child{padding-left:10px}
+.mod .n{font-size:12px;color:var(--ink2)}
+.mod b{font-size:14px;font-weight:600;line-height:1.25}
+.mod .st{font-size:12px;color:var(--ink2);margin-top:auto}
+.mod.activa{background:var(--panel);box-shadow:inset 0 3px 0 var(--navy);padding:12px 12px 12px 12px;border-left:0}
+.mod.activa + .mod{border-left:0}
+.mod.activa .n{color:var(--navy);font-weight:600}
+.mod.activa .st{color:var(--ink)}
+.mod.activa a{white-space:nowrap;display:inline-flex;align-items:center;min-height:36px;margin-top:6px;padding:0 12px;border-radius:6px;background:var(--navy);color:#fff;text-decoration:none;font-weight:600;font-size:13px;align-self:flex-start}
+/* Ecosistema: cómo se conectan los módulos */
+.eco{margin-top:14px;border-top:1px solid var(--line2)}
+.eco summary{cursor:pointer;padding:12px 0 4px;font-weight:600;font-size:14px;list-style-position:inside}
+.eco summary span{font-weight:400;color:var(--ink2);font-size:12px;margin-left:8px}
+.eco .intro{font-size:13px;color:var(--ink2);margin:6px 0 10px;max-width:900px}
+.eco table{width:100%;border-collapse:collapse;font-size:13px;background:var(--panel)}
+.eco th{text-align:left;font-weight:600;color:var(--ink2);font-size:12px;padding:8px 12px;border-bottom:1px solid var(--line2)}
+.eco td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.eco td:first-child{white-space:nowrap;font-weight:600}
+.eco tr.activa td{background:#EEF3FB}
+.eco .ciclo-cierra{font-size:13px;margin:10px 0 0}
 
 /* 2. Qué revisar primero */
 .prio{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:16px;margin-top:16px;align-items:start}
@@ -102,8 +122,8 @@ svg text{font-family:'IBM Plex Sans','Segoe UI',sans-serif}
 .regla p{margin:0;font-size:13px;color:var(--ink2)}
 .nota{font-size:12px;color:var(--ink2);margin-top:22px}
 
-@media (max-width:1100px){.ciclo{grid-template-columns:1fr 1fr;row-gap:16px}.prio{grid-template-columns:1fr}.prio .panel:first-child{position:static}.regla{grid-template-columns:repeat(2,1fr);row-gap:16px}}
-@media (max-width:640px){main{padding:20px 16px 40px}.ciclo{grid-template-columns:1fr}.tool.activa{margin:0 -16px;padding-left:16px}.regla{grid-template-columns:1fr}.regla div{border-right:0}nav .opt,.brand b{display:none}.user .who{display:none}h1{font-size:22px}.panel{padding:16px}.sec-head{flex-direction:column;gap:4px}}
+@media (max-width:1100px){.linea{grid-template-columns:1fr 1fr;row-gap:20px}.tramo:nth-child(2) .tramo-h::after{display:none}.prio{grid-template-columns:1fr}.prio .panel:first-child{position:static}.regla{grid-template-columns:repeat(2,1fr);row-gap:16px}}
+@media (max-width:640px){main{padding:20px 16px 40px}.linea{grid-template-columns:1fr}.tramo-h::after{display:none}.mods,.t-ingreso .mods{grid-auto-flow:row;grid-template-columns:1fr}.mod{min-height:0;padding:10px 10px}.mod + .mod{border-left:0;border-top:1px solid var(--line)}.eco td:first-child{white-space:normal}.eco table,.eco tbody,.eco tr,.eco td{display:block}.eco thead{display:none}.eco td{border:0;padding:2px 0}.eco tr{padding:10px 0;border-bottom:1px solid var(--line)}.regla{grid-template-columns:1fr}.regla div{border-right:0}nav .opt,.brand b{display:none}.user .who{display:none}h1{font-size:22px}.panel{padding:16px}.sec-head{flex-direction:column;gap:4px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -123,6 +143,16 @@ svg text{font-family:'IBM Plex Sans','Segoe UI',sans-serif}
 </header>
 
 <main id="main">
+  <section class="plataforma" id="plataforma" aria-labelledby="h-ciclo">
+    <div class="sec-head"><h2 id="h-ciclo">Talent Hub, del requerimiento al cese</h2><p>9 módulos en el ciclo del trabajador. Hoy opera Validación documental; los demás son la hoja de ruta propuesta.</p></div>
+    <div class="linea" id="ciclo"></div>
+    <details class="eco" id="ecosistema">
+      <summary>Cómo se conectan los módulos<span>propuesta para validar con STRACON</span></summary>
+      <p class="intro">Cada módulo usa lo que dejó el anterior: el trabajador entrega sus datos una sola vez y la información lo acompaña en todo el ciclo.</p>
+      <div id="ecoTabla"></div>
+    </details>
+  </section>
+
   <div class="stamp" id="stamp"></div>
   <h1 id="titular"></h1>
   <p class="lede" id="bajada"></p>
@@ -155,11 +185,7 @@ svg text{font-family:'IBM Plex Sans','Segoe UI',sans-serif}
     </div>
   </section>
 
-  <section class="sec" aria-labelledby="h-ciclo">
-    <div class="sec-head"><h2 id="h-ciclo">El ciclo del trabajador, en un solo lugar</h2><p>Talent Hub reúne 9 módulos, del requerimiento al cese. El primero en operar es Validación documental.</p></div>
-    <div class="ciclo" id="ciclo"></div>
-    <p class="nota">Prototipo con datos ficticios de la demo. Los conteos salen del mismo estado que la Consola y Revisión humana: lo que decidas allí se refleja aquí. Los módulos marcados «Próximamente» son la hoja de ruta propuesta, por validar con STRACON.</p>
-  </section>
+  <p class="nota">Prototipo con datos ficticios de la demo. Los conteos salen del mismo estado que la Consola y Revisión humana: lo que decidas allí se refleja aquí. Los módulos marcados «Próximamente» y sus conexiones son la hoja de ruta propuesta, por validar con STRACON.</p>
 </main>
 
 <script>
@@ -326,20 +352,40 @@ svg text{font-family:'IBM Plex Sans','Segoe UI',sans-serif}
     ['Salida', [
       ['Cese del colaborador', 'Desvinculación ordenada, entrega de equipos y elegibilidad para volver.']]]
   ];
-  function dibujarCiclo(c, lst) {
+  // Ecosistema (propuesta): de dónde toma datos cada módulo y a qué módulo los entrega
+  var ECO = [
+    ['Plan de dotación por contrato y faena (fuente por definir)', 'Validación documental: cargo, faena y fecha de inicio de cada vacante'],
+    ['Documentos del postulante en SharePoint; sitios de MINEDUC, Registro Civil y CEIM', 'Examen médico ocupacional: expediente validado, sin volver a pedir documentos'],
+    ['Resultados del centro médico (fuente por definir)', 'Gestión de vuelos y régimen: aptitud y vigencia del examen'],
+    ['Calendario de turnos por régimen y reservas de vuelo (fuentes por definir)', 'Habitabilidad: quién sube a faena y cuándo'],
+    ['Ocupación del campamento (fuente por definir)', 'Experiencia del worker: solicitudes de alojamiento'],
+    ['Smart bands y cámaras en los vehículos', 'Gestión de vuelos y régimen (ajustar turnos) y Rendimiento (alertas por turno)'],
+    ['Fatiga, capacitaciones y evaluaciones por equipo', 'Requerimiento de personas: especialidades disponibles'],
+    ['Pulso y solicitudes del trabajador', 'Rendimiento y Cese: señales tempranas de rotación'],
+    ['Rendimiento y experiencia del trabajador', 'Requerimiento de personas: quién es elegible para volver']
+  ];
+  function dibujarCiclo(c) {
     var tot = c.abiertos, n = 0;
-    var urg = lst.filter(function (z) { return z.grupo === 1; }).length;
     document.getElementById('ciclo').innerHTML = FASES.map(function (f) {
-      var tools = f[1].map(function (t) {
+      var faena = f[0] === 'En faena';
+      var mods = f[1].map(function (t) {
         n++;
         var num = '<span class="n">' + (n < 10 ? '0' : '') + n + '</span>';
-        if (t[1] !== null) return '<li class="tool">' + num + '<span><b>' + t[0] + '</b><span class="desc">' + t[1] + '</span><span class="prox">Próximamente</span></span></li>';
-        return '<li class="tool activa" aria-current="step">' + num + '<span><b>' + t[0] + '</b><span class="desc">Dos agentes revisan y contrastan los documentos; la persona decide.</span>' +
-          '<span class="estado"><strong>' + tot.porRevisar + '</strong> por decidir · ' + tot.clar + ' observados · ' + tot.ok + ' conformes<br>' + pl(urg, 'caso vencido o por vencer', 'casos vencidos o por vencer') + '</span>' +
-          '<a class="abrir" href="Dashboard.dc.html">Abrir el módulo</a></span></li>';
+        if (t[1] !== null) return '<li class="mod" title="' + esc(t[1]) + '">' + num + '<b>' + t[0] + '</b><span class="st">Próximamente</span></li>';
+        return '<li class="mod activa" aria-current="step">' + num + '<b>' + t[0] + '</b><span class="st"><strong>' + tot.porRevisar + '</strong> por decidir · ' + tot.clar + ' observados</span>' +
+          '<a href="Dashboard.dc.html">Abrir el módulo</a></li>';
       }).join('');
-      return '<div class="fase"><h3>' + f[0] + '<small>' + pl(f[1].length, 'módulo', 'módulos') + '</small></h3><ol>' + tools + '</ol></div>';
+      return '<div class="tramo' + (faena ? ' t-faena' : '') + (f[0] === 'Ingreso' ? ' t-ingreso' : '') + '"><div class="tramo-h"><b>' + f[0] + '</b><span>' + (faena ? '↻ se repite en cada turno' : pl(f[1].length, 'módulo', 'módulos')) + '</span></div><ol class="mods">' + mods + '</ol></div>';
     }).join('');
+    var i = 0, filas = '';
+    FASES.forEach(function (f) {
+      f[1].forEach(function (t) {
+        var e = ECO[i]; i++;
+        filas += '<tr' + (t[1] === null ? ' class="activa"' : '') + '><td>' + (i < 10 ? '0' : '') + i + ' ' + t[0] + (t[1] === null ? ' · opera hoy' : '') + '</td><td>' + esc(e[0]) + '</td><td>' + esc(e[1]) + '</td></tr>';
+      });
+    });
+    document.getElementById('ecoTabla').innerHTML = '<table><thead><tr><th scope="col">Módulo</th><th scope="col">Toma datos de</th><th scope="col">Entrega a</th></tr></thead><tbody>' + filas + '</tbody></table>' +
+      '<p class="ciclo-cierra">El ciclo se cierra: el cese alimenta el próximo requerimiento con quién es elegible para volver.</p>';
   }
 
   function render() {
@@ -362,7 +408,7 @@ svg text{font-family:'IBM Plex Sans','Segoe UI',sans-serif}
     if (clic) partes.push(pl(clic, 'se resuelve', 'se resuelven') + ' en un clic' + (rec ? ' (incluida ' + pl(rec, 'aclaración que ya llegó', 'aclaraciones que ya llegaron') + ')' : ''));
     document.getElementById('bajada').textContent = (partes.length ? 'Además, ' + partes.join(' y ') + '. ' : '') + (lst.length ? 'Empieza por arriba de la lista: está ordenada por plazo y luego por riesgo.' : '');
     document.getElementById('prioSub').textContent = 'Validación documental · ' + pl(pend, 'pendiente', 'pendientes') + (rec ? ' + ' + pl(rec, 'aclaración recibida', 'aclaraciones recibidas') : '') + ' · procesos abiertos · meta: decidir en menos de 24 h';
-    dibujarCiclo(c, lst);
+    dibujarCiclo(c);
     dibujarMatriz(lst);
     dibujarCola(lst, t.esperando);
   }
@@ -380,6 +426,8 @@ svg text{font-family:'IBM Plex Sans','Segoe UI',sans-serif}
 
   render();
   VD.suscribir(render);
+  // Para la demo: TalentHub.html#ecosistema abre el panel de conexiones
+  if (location.hash === '#ecosistema') { document.getElementById('ecosistema').open = true; }
 })();
 </script>
 </body>
