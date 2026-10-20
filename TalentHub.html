@@ -348,6 +348,7 @@ svg text{font-family:'IBM Plex Sans','Segoe UI',sans-serif}
     var nombre = VD.usuario();
     var conNombre = nombre !== 'Revisor';
     document.getElementById('uName').textContent = nombre;
+    document.querySelector('.user .who i').style.display = conNombre ? '' : 'none'; // sin login, VD.usuario() ya dice «Revisor»
     document.getElementById('uIni').textContent = nombre.split(' ').slice(0, 2).map(function (p) { return p.charAt(0).toUpperCase(); }).join('');
     var venc = lst.filter(function (z) { return z.h > META; }).length;
     var porv = lst.filter(function (z) { return z.h >= ALERTA && z.h <= META; }).length;
